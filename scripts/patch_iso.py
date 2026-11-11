@@ -55,6 +55,18 @@ def main():
     if os.path.exists(temp_data6):
         os.remove(temp_data6)
 
+    # Injetar patches no executável SLUS_201.69 (LBA 565)
+    slus_patch_path = os.path.join(repo_root, "database", "slus_patches.json")
+    if os.path.exists(slus_patch_path):
+        print("Aplicando correções de UI, menus, habilidades e combate no SLUS_201.69...")
+        with open(slus_patch_path, "r", encoding="utf-8") as f_slus:
+            patches = json.load(f_slus)
+        with open(iso_path, "r+b") as f_iso:
+            for offset, hex_str in patches:
+                f_iso.seek(0x11A800 + offset)
+                f_iso.write(bytes.fromhex(hex_str))
+        print(f"Executável SLUS_201.69 atualizado com {len(patches)} blocos de tradução!")
+
     print("=== PROCESSO CONCLUÍDO COM SUCESSO! ===")
 
 if __name__ == '__main__':
