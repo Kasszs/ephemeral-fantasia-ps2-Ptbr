@@ -87,7 +87,7 @@ Em vez de uma eliminação mecânica do "este/isto", o projeto implementou uma c
 ## 4. Estrutura do Repositório
 
 ```text
-jogo-(PS2)-ptbr/
+ephemeral-fantasia-ps2-Ptbr/
 ├── database/
 │   └── translation_database.json   # Banco de dados com as 127.450 strings traduzidas
 ├── editor/
@@ -126,8 +126,8 @@ jogo-(PS2)-ptbr/
 ### Passos de Execução
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/Kasszs/jogo-(PS2)-ptbr.git
-   cd jogo-(PS2)-ptbr
+   git clone https://github.com/Kasszs/ephemeral-fantasia-ps2-Ptbr.git
+   cd ephemeral-fantasia-ps2-Ptbr
    ```
 
 2. Instale as dependências:
