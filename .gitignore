@@ -1,0 +1,27 @@
+# Binários proprietários e imagens de disco
+*.iso
+*.ISO
+*.bin
+*.BIN
+*.bak
+*.BAK
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.venv
+venv/
+ENV/
+
+# Sistema Operacional
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Temporários e logs
+*.log
+temp/
+scratch/
