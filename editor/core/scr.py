@@ -92,17 +92,20 @@ class SCRScript:
         extracted = []
         max_text_offset = max(referenced_text_offsets) if referenced_text_offsets else 0
         
+        invalid_ctrls = set(range(0, 32)) - {9, 10, 13, 26, 12}
+        
         while pos < section_end:
             rel_off = pos - str_base
-            if referenced_text_offsets and rel_off > max_text_offset:
-                if self.raw_data[pos : pos + 4] == b"\x00\x00\x00\x00":
-                    break
+            if self.raw_data[pos : pos + 4] == b"\x00\x00\x00\x00":
+                break
 
             null_pos = self.raw_data.find(b"\x00", pos, section_end)
             if null_pos == -1:
                 break
             chunk = self.raw_data[pos:null_pos]
             if len(chunk) > 0:
+                if any(b in invalid_ctrls for b in chunk) or b"\xff\xff" in chunk:
+                    break
                 printable_cnt = sum(1 for b in chunk if 32 <= b <= 255 or b in (10, 13, 9, 26, 12, 1, 2, 3, 143))
                 if printable_cnt / len(chunk) >= 0.75:
                     try:
