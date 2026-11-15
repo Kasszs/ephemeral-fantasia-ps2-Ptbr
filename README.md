@@ -1,162 +1,115 @@
-# Ephemeral Fantasia (PlayStation 2) — Tradução e Localização em Português do Brasil (PT-BR)
+# Ephemeral Fantasia (PlayStation 2) — Tradução em Português do Brasil (PT-BR)
 
-> [!IMPORTANT]
-> **Status do Projeto**: 🟡 **Trabalho em Andamento (Work in Progress - WIP)**  
-> **Progresso Geral**:
-> - **Textos**: 100% traduzidos e revisados (43.332 falas de personagens e 127.450 strings de jogo).
-> - **Gráficos & Menus**: Telas de combate, menus, minimapas e fontes acentuadas implementados.
-> - **Harmonização Literária**: Equilíbrio sociolinguístico de demonstrativos (*este/esse, isto/isso*) finalizado.
-> - **Fase Atual**: Playtesting integral na ROM para verificação de limites visuais de caixas de texto e polimento estético em emulador e hardware real.
+Projeto de tradução completa e ferramentas de romhacking para o clássico cult **Ephemeral Fantasia** (lançado no Japão como *Reiselied: Ephemeral Fantasia* pela Konami em 2000 para o PlayStation 2).
 
 ---
 
-## 1. Visão Geral do Jogo
+## 🎮 Sobre o Jogo
 
-*Ephemeral Fantasia* (lançado no Japão como *Reiselied: Ephemeral Fantasia* pela Konami em 2000 para o PlayStation 2) é um RPG único que combina exploração musical, combate estratégico por turnos e uma mecânica central de **Loop Temporal de 7 Dias**.
+*Ephemeral Fantasia* é um RPG único que combina exploração musical, combate por turnos e uma mecânica central de **Loop Temporal de 7 Dias**:
 
-O jogador assume o papel de **Mouse**, um ladrão e menestrel errante acompanhado por **Patty** (sua guitarra falante mágica), contratado para tocar no casamento da Princesa Loreille com o misterioso Lorde Xelpherpolis na idílica ilha de Pandule. Ao fim da primeira semana, Mouse descobre que a ilha está presa em um feitiço de tempo selado onde o tempo reinicia ciclicamente e a população perde suas memórias recentes.
+O jogador controla **Mouse**, um jovem bardo errante e ladrão habilidoso acompanhado por **Patty** (seu alaúde mágico falante), contratado para tocar no casamento da Princesa Loreille com o misterioso Lorde Xelpherpolis na ilha de Pandule. Ao término da primeira semana, Mouse descobre que a ilha está presa em um feitiço de tempo selado onde os dias se repetem ciclicamente e a população perde suas memórias recentes.
 
-Cada NPC na ilha possui uma rotina horária própria, 24 horas por dia ao longo dos 7 dias da semana, tornando o mundo vivo e repleto de eventos baseados em tempo real.
-
----
-
-## 2. Engenharia Reversa e Pipeline Técnico
-
-O desenvolvimento da tradução exigiu a criação de uma suíte completa de engenharia reversa proprietária em Python, localizada na pasta [`editor/`](./editor/):
-
-```mermaid
-flowchart TD
-    ISO["Ephemeral Fantasia (USA).iso
-(1.491.238.912 bytes)"] -->|Leitura LBA 386669| DATA6["DATA6_US.BIN
-(57.094.144 bytes)"]
-    DATA6 -->|RHZArchive.load| SCRIPTS["868 Scripts de Cena e Evento"]
-    SCRIPTS -->|SCRFile.parse| DIALOGS["43.332 Falas Humanas
-(Ponteiros e Comandos de Cor)"]
-    
-    DB["translation_database.json
-(127.450 Entradas Traduzidas)"] --> PROJECT["TranslationProject
-(Controle Físico de Budget e Setores)"]
-    PROJECT -->|compile_all| NEW_DATA6["DATA6_US.BIN Recompilado
-(57.094.144 bytes exatos)"]
-    NEW_DATA6 -->|ISOManager.inject_data6| NEW_ISO["ISO Traduzida PT-BR
-(1.491.238.912 bytes exatos)"]
-```
-
-### Principais Componentes Técnicos Desenvolvidos
-
-1. **`editor/core/rhz.py` (Arquivador RHZ)**:
-   - Formato de arquivo comprimido proprietário da Konami que encapsula os 868 scripts do jogo.
-   - Suporte a descompressão e reempacotamento binário com padding estrito de múltiplos de 2048 bytes (alinhamento de setor de DVD de PS2).
-
-2. **`editor/core/scr.py` (Parser de Scripts de Cena)**:
-   - Descompilação e remontagem de fluxos de eventos, ponteiros relativos de texto, tabelas de salto e tags de controle embutidas (cores hexadecimais `c`, pausas ``, quebras de linha e avanço de página).
-
-3. **`editor/core/project.py` (Gerenciador de Projeto & Orçamento Físico)**:
-   - Validação em tempo real de `max_safe`, `overflow` e `slack_to_sector` para garantir que nenhuma expansão textual quebre a tabela de conteúdo (TOC) da ROM.
-
-4. **`editor/core/iso.py` (Injetor de Imagem ISO)**:
-   - Injeção in-place no endereço LBA 386669, garantindo a integridade estrutural da ISO do PlayStation 2 sem corromper partições ou arquivos vizinhos.
-
-5. **`editor/core/font_engine.py` (Motor de Tipografia)**:
-   - Suporte aos glifos da língua portuguesa (á, é, í, ó, ú, â, ê, ô, ã, õ, ç, Á, É, Í, Ó, Ú, Â, Ê, Ô, Ã, Õ, Ç) com larguras de glifos proporcionais autênticas do PS2.
+Cada habitante da ilha possui rotinas horárias próprias ao longo dos sete dias, tornando o mundo dinâmico e repleto de eventos dependentes do relógio em tempo real.
 
 ---
 
-## 3. Processo de Tradução e Adaptação Literária
+## 📊 Status da Tradução
 
-A tradução foi executada em **6 etapas temáticas e cronológicas**, guiada por uma rigorosa **Bíblia de Voz** documentada na pasta [`revisao_etapas/`](./revisao_etapas/):
-
-| Etapa | Conteúdo e Arcos Narrativos | Volume de Falas |
-| :--- | :--- | :---: |
-| [**Dossiê de Personagens**](./revisao_etapas/DOSSIE_PERSONAGENS.md) | Bíblia de voz de protagonistas, aliados, antagonistas e NPCs. | Documento Transversal |
-| [**Etapa 1**](./revisao_etapas/ETAPA_1_PROLOGO_E_DIA_1.md) | Prólogo marítimo, porto de Pandule, estalagem de Rinna e audiência real no palácio. | ~265 falas |
-| [**Etapa 2**](./revisao_etapas/ETAPA_2_DIA_2_DESPERTAR_E_LOOP.md) | O despertar no quarto, o choque do tempo que voltou, Claire, Migarifo e o Loop de Pandule. | 324 falas |
-| [**Etapa 3**](./revisao_etapas/ETAPA_3_DIAS_3_4_RECRUTAMENTO.md) | Recrutamento dos aliados: Rinna, General Bagoth, Lobo do Mar Kyte e a Besta de Ferro Grantus. | 378 falas |
-| [**Etapa 4**](./revisao_etapas/ETAPA_4_DIAS_5_7_CLIMAX_E_FINAL.md) | Véspera das bodas, taça envenenada, invasão do palácio, Altar Sagrado, batalha final e epílogo. | 915 falas |
-| [**Etapa 5**](./revisao_etapas/ETAPA_5_NPCS_E_ROTINAS.md) | Moradores urbanos de Pandule: mercado central, feirantes, guarda da cidade, crianças e professores. | 474 falas |
-| [**Etapa 6**](./revisao_etapas/ETAPA_6_PERIFERIA_E_ZONA_RURAL.md) | Periferia operária (Bairro Leste), cortadores de pedra, caçadores, minas de carvão e balcão de Claire. | 412 falas |
-| **Harmonização Global** | Equilíbrio sociolinguístico dos demonstrativos em 511 scripts da ROM. | 2.185 falas |
-
-### Harmonização Sociolinguística dos Demonstrativos
-Em vez de uma eliminação mecânica do "este/isto", o projeto implementou uma calibragem por registro social:
-- **Registro Solene / Nobre / Sagrado (215 falas)**: O "este/esta/deste" foi preservado onde tem valor dramático autêntico (discursos marciais do General Bagoth, elegância da Princesa Loreille, tirania de Lorde Xelpherpolis, estátuas e inscrições em templos).
-- **Registro Popular / Cotidiano (1.970 falas)**: A linguagem do povo das ruas, pescadores, comerciantes, crianças e os pensamentos sarcásticos da Patty foram adaptados para a naturalidade do português brasileiro falado (*"esse/essa/isso/desse/dessa/nesse/nessa"*).
+| Componente | Progresso | Detalhes |
+| :--- | :---: | :--- |
+| **Textos dos Diálogos** | 100% | Todos os 868 scripts e mais de 43.000 falas traduzidos. |
+| **Menus e Interface** | 100% | Telas de combate, opções, status, lojas e telas de salvamento. |
+| **Itens e Equipamentos** | 100% | 148 itens consumíveis, armas e acessórios (incluindo a clássica *Poção Fênix*). |
+| **Bestiário de Monstros** | 100% | 160 monstros e chefes com nomes descritivos sem truncamentos. |
+| **Gráficos e Texturas** | 100% | Menus de combate, minimapas, bússolas e telas de configuração (TIM2). |
+| **Fontes e Acentuação** | 100% | Fonte proporcional (VWF) com acentuação completa em português (á, é, í, ó, ú, â, ê, ô, ã, õ, ç). |
+| **Revisão e Testes em Jogo** | 🟡 Playtest | Testes práticos no emulador PCSX2 e em hardware real. |
 
 ---
 
-## 4. Estrutura do Repositório
+## 💿 Informações da ROM Recomendada
+
+Para aplicar o patch e compilar a imagem traduzida, utilize uma cópia limpa da ISO americana original:
+
+* **Jogo:** Ephemeral Fantasia (USA)
+* **Código do Disco:** `SLUS-20169`
+* **Formato:** Imagem ISO de DVD-ROM
+* **Tamanho exato:** `1.491.238.912 bytes` (728.144 setores de 2.048 bytes)
+* **Setor LBA de DATA6_US.BIN:** `386669` (offset `0x2F326800`)
+* **Setor LBA de SLUS_201.69:** `565` (offset `0x11A800`)
+
+---
+
+## 🛠️ Engenharia Reversa e Detalhes Técnicos
+
+A tradução deste jogo envolveu o desenvolvimento de ferramentas próprias para desvendar os formatos da Konami no PS2:
+
+1. **O Container RHZ (`DATA6_US.BIN`):** Pacote com 868 scripts de diálogos empacotados em setores de 2KB. O arquivo recompilado mantém estritamente os 57.094.144 bytes originais para não deslocar outros arquivos na ISO.
+2. **Scripts de Cena (`.SCR`):** Formato binário proprietário com cabeçalho de 44 bytes, tabelas de ponteiros relativos e blocos de comandos de cores hexadecimais (` c`). O projeto possui proteção de cauda binária 3D para evitar que a expansão de textos desloque os waypoints de cutscenes (prevenindo travamentos com tela de loading infinita).
+3. **Executável (`SLUS_201.69`):** Contém strings de tamanho fixo em memória para menus, habilidades, itens e bestiário completo.
+4. **Sistema de Fontes e Largura Proporcional (VWF):** Fonte acentuada desenhada para o português com balanceamento de largura para evitar quebras anormais nas caixas de diálogo.
+5. **Texturas TIM2:** Extração, desentrelaçamento de memória de vídeo do Graphics Synthesizer (*unswizzling*), edição gráfica e reempacotamento.
+
+Para mais detalhes sobre os formatos binários, consulte a [**Documentação Técnica de Formatos**](docs/FORMATOS.md).  
+Para detalhes sobre os personagens e vocabulário da ilha, consulte o [**Guia de Personagens**](docs/PERSONAGENS.md).
+
+---
+
+## 📁 Estrutura do Repositório
 
 ```text
 ephemeral-fantasia-ps2-Ptbr/
 ├── database/
-│   └── translation_database.json   # Banco de dados com as 127.450 strings traduzidas
+│   ├── slus_patches.json           # Patches em hexadecimal para o executável SLUS_201.69
+│   └── translation_database.json   # Banco de dados de todas as strings traduzidas
+├── docs/
+│   ├── FORMATOS.md                 # Documentação técnica detalhada dos formatos de arquivo
+│   └── PERSONAGENS.md              # Guia de personagens, personalidades e padronização
 ├── editor/
-│   ├── core/                       # Módulos centrais (RHZ, SCR, ISO, Fonte, Projeto)
-│   ├── ui/                         # Interface gráfica de visualização e edição
-│   └── app.py                      # Aplicação do Editor de Ephemeral Fantasia
-├── graficos_extraidos/             # Texturas e elementos visuais traduzidos em PT-BR
-│   ├── Combate/
-│   ├── Menus_e_Telas/
-│   ├── Mapas_e_Bussolas/
-│   └── Minijogos_e_Cartas/
-├── revisao_etapas/                 # Dossiês e árvores de revisão narrativa
-│   ├── 00_INDICE_GERAL.md
-│   ├── DOSSIE_PERSONAGENS.md
-│   ├── ETAPA_1_PROLOGO_E_DIA_1.md
-│   ├── ETAPA_2_DIA_2_DESPERTAR_E_LOOP.md
-│   ├── ETAPA_3_DIAS_3_4_RECRUTAMENTO.md
-│   ├── ETAPA_4_DIAS_5_7_CLIMAX_E_FINAL.md
-│   ├── ETAPA_5_NPCS_E_ROTINAS.md
-│   └── ETAPA_6_PERIFERIA_E_ZONA_RURAL.md
+│   ├── app.py                      # Interface gráfica (PyQt) do Editor de Ephemeral Fantasia
+│   ├── core/                       # Módulos centrais (RHZ, SCR, ISO, Fonte e Projeto)
+│   └── ui/                         # Componentes de interface do editor
+├── graficos_extraidos/             # Texturas gráficas traduzidas (TIM2)
 ├── scripts/
-│   └── patch_iso.py                # Script CLI para aplicar o patch em uma ISO limpa
-├── .gitignore                      # Proteção contra upload de ISOs e dumps proprietários
-├── README.md                       # Documentação mestre do projeto
+│   └── patch_iso.py                # Script em Python para aplicar a tradução em uma ISO limpa
+├── .gitignore                      # Proteção contra arquivos temporários e dumps
+├── README.md                       # Apresentação do projeto
 └── requirements.txt                # Dependências Python
 ```
 
 ---
 
-## 5. Como Compilar a Tradução (Gerar a ISO PT-BR)
+## 🚀 Como Aplicar o Patch / Gerar a ISO Traduzida
 
 ### Pré-requisitos
 * Python 3.10 ou superior instalado.
-* Imagem ISO original de *Ephemeral Fantasia (USA)* (`SLUS_201.69` / 1.491.238.912 bytes).
+* Imagem ISO original de *Ephemeral Fantasia (USA)* (`SLUS-20169` / 1.491.238.912 bytes).
 
-### Passos de Execução
-1. Clone este repositório:
+### Passo a Passo
+
+1. **Clone o repositório:**
    ```bash
    git clone https://github.com/Kasszs/ephemeral-fantasia-ps2-Ptbr.git
    cd ephemeral-fantasia-ps2-Ptbr
    ```
 
-2. Instale as dependências:
+2. **Instale as dependências:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Execute o script de injeção passando o caminho da sua ISO:
+3. **Execute o patcher apontando para a sua ISO original:**
    ```bash
    python scripts/patch_iso.py "caminho/para/Ephemeral Fantasia (USA).iso"
    ```
 
-O script criará um backup de segurança e aplicará todas as traduções e alinhamentos de setores na imagem do jogo.
+O script criará automaticamente um backup da imagem original e injetará os scripts traduzidos e os patches do executável diretamente na ISO.
 
 ---
 
-## 6. Próximos Passos (Roadmap WIP)
+## 👥 Créditos e Ferramentas
 
-- [x] Extração e engenharia reversa do formato RHZ/SCR.
-- [x] Tradução integral dos 868 scripts e 127.450 strings.
-- [x] Revisão literária humanizada das Etapas 1 a 6.
-- [x] Adaptação de texturas de combate, minimapas, bússola e menus.
-- [x] Balanceamento sociolinguístico de demonstrativos.
-- [ ] Playtesting completo do início ao fim (Dia 1 ao Dia 7).
-- [ ] Verificação de formatação e limites visuais em diálogos de lojas e sidequests secundárias.
-- [ ] Lançamento do patch público para a comunidade de retrogaming.
-
----
-
-**Autor / Tradutor**: Kassio (Kasszs)  
-**Plataforma**: PlayStation 2  
-**Gênero**: RPG de Loop Temporal / Fantasia  
+* **Romhacking, Ferramentas e Tradução:** Kassio (Kasszs)
+* **Ferramentas Utilizadas:** PCSX2, Ghidra, HxD, Python 3, Pillow, PyQt.
+* **Agradecimentos:** À comunidade de romhacking e preservação de jogos de PlayStation 2.
