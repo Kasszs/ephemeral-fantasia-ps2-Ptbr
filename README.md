@@ -71,6 +71,9 @@ ephemeral-fantasia-ps2-Ptbr/
 │   ├── core/                       # Módulos centrais (RHZ, SCR, ISO, Fonte e Projeto)
 │   └── ui/                         # Componentes de interface do editor
 ├── graficos_extraidos/             # Texturas gráficas traduzidas (TIM2)
+├── releases/
+│   ├── README.md                   # Instruções de aplicação do patch e status do Beta
+│   └── Ephemeral_Fantasia_PTBR_Beta_v0.9.xdelta # Patch pronto para aplicação via xdeltaUI
 ├── scripts/
 │   └── patch_iso.py                # Script em Python para aplicar a tradução em uma ISO limpa
 ├── .gitignore                      # Proteção contra arquivos temporários e dumps
@@ -82,11 +85,27 @@ ephemeral-fantasia-ps2-Ptbr/
 
 ## 🚀 Como Aplicar o Patch / Gerar a ISO Traduzida
 
-### Pré-requisitos
+### Método 1: Direto via Patch xdelta (Mais rápido e simples)
+
+Caso você queira apenas jogar sem precisar compilar o projeto:
+
+1. Baixe o patch `Ephemeral_Fantasia_PTBR_Beta_v0.9.xdelta` localizado na pasta [`releases/`](releases/).
+2. Abra o aplicativo **xdeltaUI** (ou **Delta Patcher**).
+3. Selecione o patch `.xdelta`, a sua ISO original limpa americana (`SLUS-20169`) e defina o nome da ISO traduzida de saída.
+4. Clique em **Apply patch**.
+5. Para o passo a passo detalhado e hashes de validação, consulte o [**Guia de Releases**](releases/README.md).
+
+---
+
+### Método 2: Compilação via Script Python
+
+Para desenvolvedores e romhackers que queiram injetar os bancos de dados diretamente na ISO:
+
+#### Pré-requisitos
 * Python 3.10 ou superior instalado.
 * Imagem ISO original de *Ephemeral Fantasia (USA)* (`SLUS-20169` / 1.491.238.912 bytes).
 
-### Passo a Passo
+#### Passo a Passo
 
 1. **Clone o repositório:**
    ```bash
