@@ -56,33 +56,6 @@ Para detalhes sobre os personagens e vocabulário da ilha, consulte o [**Guia de
 
 ---
 
-## 📁 Estrutura do Repositório
-
-```text
-ephemeral-fantasia-ps2-Ptbr/
-├── database/
-│   ├── slus_patches.json           # Patches em hexadecimal para o executável SLUS_201.69
-│   └── translation_database.json   # Banco de dados de todas as strings traduzidas
-├── docs/
-│   ├── FORMATOS.md                 # Documentação técnica detalhada dos formatos de arquivo
-│   └── PERSONAGENS.md              # Guia de personagens, personalidades e padronização
-├── editor/
-│   ├── app.py                      # Interface gráfica (PyQt) do Editor de Ephemeral Fantasia
-│   ├── core/                       # Módulos centrais (RHZ, SCR, ISO, Fonte e Projeto)
-│   └── ui/                         # Componentes de interface do editor
-├── graficos_extraidos/             # Texturas gráficas traduzidas (TIM2)
-├── releases/
-│   ├── README.md                   # Instruções de aplicação do patch e status do Beta
-│   └── Ephemeral_Fantasia_PTBR_Beta_v0.9.xdelta # Patch pronto para aplicação via xdeltaUI
-├── scripts/
-│   └── patch_iso.py                # Script em Python para aplicar a tradução em uma ISO limpa
-├── .gitignore                      # Proteção contra arquivos temporários e dumps
-├── README.md                       # Apresentação do projeto
-└── requirements.txt                # Dependências Python
-```
-
----
-
 ## 🚀 Como Aplicar o Patch / Gerar a ISO Traduzida
 
 ### Método 1: Direto via Patch xdelta (Mais rápido e simples)
@@ -129,6 +102,6 @@ O script criará automaticamente um backup da imagem original e injetará os scr
 
 ## 👥 Créditos e Ferramentas
 
-* **Romhacking, Ferramentas e Tradução:** Kassio (Kasszs)
+* **Romhacking, Ferramentas e Tradução:** Kasszs
 * **Ferramentas Utilizadas:** PCSX2, Ghidra, HxD, Python 3, Pillow, PyQt.
 * **Agradecimentos:** À comunidade de romhacking e preservação de jogos de PlayStation 2.
