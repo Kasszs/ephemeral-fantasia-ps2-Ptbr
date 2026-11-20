@@ -264,11 +264,16 @@ class SCRScript:
 
         # 3. Reconstruir Seção 7 (Novo Bloco de Texto + Structs)
         str_base = self.words[7]
-        rebuilt[str_base : str_base + self.orig_text_end] = new_text_bytes[:self.orig_text_end]
-        if delta > 0:
-            rebuilt[str_base + self.orig_text_end : str_base + new_text_end] = new_text_bytes[self.orig_text_end:]
-            if self.binary_tail:
-                rebuilt[str_base + new_text_end : str_base + new_text_end + len(self.binary_tail)] = self.binary_tail
+        section_end = min(len(self.raw_data), str_base + self.words[8])
+        if delta == 0:
+            rebuilt[str_base : str_base + self.orig_text_end] = new_text_bytes[:self.orig_text_end]
+        else:
+            rebuilt = (
+                rebuilt[:str_base]
+                + new_text_bytes
+                + bytearray(self.binary_tail)
+                + rebuilt[section_end:]
+            )
             rebuilt[4:8] = struct.pack("<I", self.words[1] + delta)
             rebuilt[32:36] = struct.pack("<I", new_text_end + len(self.binary_tail))
 
